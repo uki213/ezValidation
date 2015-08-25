@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <input type="text" data-custom-validation="test01 test02" required><br>
+        <input type="email" data-custom-validation="test01"><br>
+        <input type="url" required><br>
+        <input type="number"><br>
+        <input type="tel"><br>
+    </form>
+
+
+</body>
+</html>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="ezValidation.js"></script>
+<script>
+    var validationRule = {
+        default: function (e) {
+            // required
+            if ($(e.target).prop('required') === true && $(e.target).val() === '') {
+                return '入力してください';
+            } else {
+                return false;
+            }
+        },
+        test01: function (e) {
+            if ($(e.target).val() === 'test') {
+                return '使用禁止';
+            } else {
+                return false;
+            }
+        }
+    };
+</script>
+<script>
+    (function ($) {
+        $('form').ezValidation();
+    }(jQuery));
+</script>
+
