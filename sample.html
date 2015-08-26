@@ -6,7 +6,9 @@
 </head>
 <body>
     <form>
-        <input type="text" data-custom-validation="test01 test02" required><br>
+        <input type="text" pattern="^[0-9]+$" data-custom-validation="test01 test02" required><br>
+        <input type="text" pattern="^[0-9A-Za-z]+$" title="パターンエラー" required><br>
+        <input type="text" pattern="^[0-9A-Za-z]+$" title="パターンエラー"><br>
         <input type="email" data-custom-validation="test01"><br>
         <input type="url" required><br>
         <input type="number"><br>
@@ -26,10 +28,17 @@
             // required
             if ($(e.target).prop('required') === true && $(e.target).val() === '') {
                 return '入力してください';
-            } else {
                 return false;
             }
-        },
+            // pattern
+            if ($(e.target).attr('pattern') !== undefined) {
+                var pattern = new RegExp($(e.target).attr('pattern'), 'g');
+                if (!$(e.target).val().match(pattern)) {
+                    return '指定されている形式で入力してください';
+                }
+            }
+        return false;
+    },
         test01: function (e) {
             if ($(e.target).val() === 'test') {
                 return '使用禁止';

@@ -7,7 +7,8 @@
         var settings = $.extend({
             'event': 'keydown keyup change input',
             'errClass': 'error',
-            'okClass': 'ok'
+            'okClass': 'ok',
+            'baseDom': 'body'
         }, options);
 
         return this.each(function () {
@@ -29,9 +30,22 @@
                 $(e.target).trigger('validation');
             });
 
+            // エラーポップアップ処理
+            function errorMsg(msg, e) {
+                var index = $(e.target).index();
+                $('#errBalloon' + index + ' *').remove();
+                $('#errBalloon' + index).html(msg);
+            }
+
+            function closeErrMsg(e) {
+                var index = $(e.target).index();
+                $('#errBalloon' + index).html();
+            }
+
             // カスタムバリデーション
             $(this).on('validation', inputDom, function (e) {
                 var i,
+                    arrErrorMsg = [],
                     validationType,
                     validationName = [];
 
@@ -58,16 +72,37 @@
                     }
                 }
 
+                // エラー状態をinputにclassで反映
                 $(e.target).removeClass(settings.errClass).removeClass(settings.okClass);
                 for (i = 0; i < validationName.length; i = i + 1) {
                     if (validationRule[validationName[i]] !== undefined && validationRule[validationName[i]](e) !== false) {
                         $(e.target).addClass(settings.errClass);
-                        console.log(validationRule[validationName[i]](e));
+
+                        // エラーメッセージ呼び出し
+
+                        arrErrorMsg.push(validationRule[validationName[i]](e));
                     }
                 }
+                errorMsg(arrErrorMsg, e);
+
                 if ($(e.target).hasClass(settings.errClass) === false) {
                     $(e.target).addClass(settings.okClass);
                 }
+
+                // エラーバルーンの土台作成
+                function balloonPositionSet(e) {
+                    var offset,
+                        inputNum = $(e.target).index();
+                    offset = $(e.target).offset();
+
+                    // DOM生成
+                    if (!$('#errBalloon' + inputNum)[0]) {
+                        $(settings.baseDom).append('<span id="errBalloon' + inputNum + '"></span>');
+                    }
+                    $('#errBalloon' + inputNum).offset(offset);
+
+                }
+                balloonPositionSet(e);
 
             });
 
