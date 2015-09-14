@@ -6,18 +6,25 @@
         // プラグインオプション
         var settings = $.extend({
             'event': 'keydown keyup change input', // バリデーションを行うイベントを指定
-            'errClass': 'error', // エラー時に入力項目に付けるClass名
-            'okClass': 'ok', // 非エラー時に入力項目に付けるClass名
-            'baseDom': 'body' // エラーバルーンの土台を設置するDOM名
+            'errClass': 'invalid', // エラー時に入力項目に付けるClass名
+            'okClass': 'valid', // 非エラー時に入力項目に付けるClass名
+            'baseDom': 'body', // エラーバルーンの土台を設置するDOM名
+            'closeButton': true // バルーンのクローズボタンの有無
         }, options);
 
         return this.each(function () {
 
             // 初期設定
             var inputDom = 'input, select, textarea',
-                customVali = 'custom-validation';
+                customVali = 'custom-validation',
+                closeBtnDom = '<span class="close">×</span></span>';
 
             $(this).attr('novalidate', 'novalidate'); // HTML5標準のバリデーションをオフ
+
+            // バルーンのクローズボタンの有無
+            if (settings.closeButton === false) {
+                closeBtnDom = '';
+            }
 
             // 送信機能
             $(this).on('submit', function () {
@@ -42,7 +49,7 @@
                     for (i = 0; i < msg.length; i = i + 1) {
                         errMsgHtml = errMsgHtml + '<div>' + msg[i] + '</div>';
                     }
-                    $('#errBalloon' + index).html('<span class="balloon">' + errMsgHtml + '</span>');
+                    $('#errBalloon' + index).html('<span class="balloon">' + errMsgHtml + closeBtnDom + '</span>');
                 }
             }
 
@@ -90,6 +97,7 @@
                 for (i = 0; i < validationType.length; i = i + 1) {
                     if (validationRule[validationType[i]] !== undefined && validationRule[validationType[i]](e) !== false) {
                         $(e.target).addClass(settings.errClass);
+                        $(e.target).trigger('invalid');
                         // エラーメッセージ呼び出し
                         arrErrorMsg.push(validationRule[validationType[i]](e));
                     }
@@ -100,6 +108,11 @@
                 if ($(e.target).hasClass(settings.errClass) === false) {
                     $(e.target).addClass(settings.okClass);
                 }
+
+                // balloonの☓ボタン
+                $('body').on('click', '.close', function (e) {
+                    $(e.target).parents('.balloon').remove();
+                });
 
             });
 

@@ -5,18 +5,18 @@
     <title>Document</title>
     <style type="text/css">
 
-        form{
+        form {
             display: block;
             width: 640px;
             margin: 100px auto;
         }
 
-        .errBalloon{
+        .errBalloon {
             width: auto;
             height: 0;
         }
 
-        .balloon{
+        .balloon {
             position: absolute;
             background: #000;
             color: #fff;
@@ -27,22 +27,40 @@
             border-radius: 5px;
         }
 
-        .balloon:before{
+        .balloon:before {
             content: '';
             display: block;
             width: 0;
             height: 0;
             border-style: solid;
             border-width: 10px 5px 0 5px;
-            border-color: #000000 transparent transparent transparent;
+            border-color: #000 transparent transparent transparent;
             position: absolute;
             bottom: -10px;
             left: 10px;
         }
 
-        input.error,
-        select.error,
-        textarea.error{
+        .balloon .close {
+            content: '×';
+            display: block;
+            width: 14px;
+            height: 14px;
+            font-weight: 700;
+            font-size: 10px;
+            line-height: 14px;
+            font-family: arial, sans-serif;
+            position: absolute;
+            right: -5px;
+            top: -5px;
+            border-radius: 10px;
+            background: #000;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        input.invalid ,
+        select.invalid ,
+        textarea.invalid {
             outline: 2px solid #f66;
         }
 
