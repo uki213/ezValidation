@@ -135,19 +135,19 @@
                     // pattern
                     if ($(e.target).attr('pattern') !== undefined) {
                         var pattern = new RegExp($(e.target).attr('pattern'), 'g');
-                        if (!$(e.target).val().match(pattern)) {
+                        if (!$(e.target).val().match(pattern) && $(e.target).val() !== '') {
                             return errorMSG('指定されている形式で入力してください', e);
                         }
                     }
                     // type=email
                     if (e.target.type === 'email') {
-                        if ($(e.target).val().match(/.+@.+\..+$/) === null) {
+                        if ($(e.target).val().match(/.+@.+\..+$/) === null && $(e.target).val() !== '') {
                             return errorMSG('メールアドレスを入力してください', e);
                         }
                     }
                     // type=url
                     if (e.target.type === 'url') {
-                        if ($(e.target).val().match(/^[a-z]+:.+/) === null) {
+                        if ($(e.target).val().match(/^[a-z]+:.+/) === null && $(e.target).val() !== '') {
                             return errorMSG('URLを入力してください', e);
                         }
                     }
@@ -155,7 +155,6 @@
                     if (e.target.validity.valid === false) {
                         return errorMSG('指定されている形式で入力してください', e);
                     }
-
                     return false;
                 }
             });
