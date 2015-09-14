@@ -3,7 +3,7 @@
     'use strict';
     $.fn.ezValidation = function (options) {
 
-        // 渡された任意のオプションで拡張されるデフォルトをいくつか作成する
+        // プラグインオプション
         var settings = $.extend({
             'event': 'keydown keyup change input', // バリデーションを行うイベントを指定
             'errClass': 'error', // エラー時に入力項目に付けるClass名
@@ -22,10 +22,14 @@
             // 送信機能
             $(this).on('submit', function () {
                 $(inputDom).trigger('validation');
-                return false;
+
+                // バリデーションエラーが有った場合は submit 処理を中断する。
+                if ($(inputDom).hasClass(settings.errClass) === true) {
+                    return false;
+                }
             });
 
-            // バリデーションイベント
+            // 各イベントを一つのイベントへ統一する
             $(this).find(inputDom).on(settings.event, function (e) {
                 $(e.target).trigger('validation');
             });
@@ -51,30 +55,16 @@
             $(this).on('validation', inputDom, function (e) {
                 var i,
                     arrErrorMsg = [],
-                    validationType,
-                    validationName = [];
+                    validationType;
 
-                // バリデーションルール(data-custom-validation)を配列化
                 validationType = $(e.target).data(customVali);
 
                 // custom-validationが存在しない時
-                if (validationType === undefined) {
-                    validationType = '';
-                }
-
-                // custom-validationが1つの場合は split の処理を迂回させる
-                if (validationType.match(' ') !== null) {
-                    validationType = validationType.split(' ');
-                    for (i = 0; i < validationType.length; i = i + 1) {
-                        validationName.push(validationType[i]);
-                    }
-                    validationName.push('default');
+                if (validationType !== undefined) {
+                    validationType = validationType.replace(/ /g, ',').split(',');
+                    validationType.push('default');
                 } else {
-                    if (validationType === '') {
-                        validationName.push('default');
-                    } else {
-                        validationName.push(validationType, 'default');
-                    }
+                    validationType = ['default'];
                 }
 
                 // エラーバルーンの土台作成
@@ -97,15 +87,16 @@
 
                 // エラー状態をinputにclassで反映
                 $(e.target).removeClass(settings.errClass).removeClass(settings.okClass);
-                for (i = 0; i < validationName.length; i = i + 1) {
-                    if (validationRule[validationName[i]] !== undefined && validationRule[validationName[i]](e) !== false) {
+                for (i = 0; i < validationType.length; i = i + 1) {
+                    if (validationRule[validationType[i]] !== undefined && validationRule[validationType[i]](e) !== false) {
                         $(e.target).addClass(settings.errClass);
                         // エラーメッセージ呼び出し
-                        arrErrorMsg.push(validationRule[validationName[i]](e));
+                        arrErrorMsg.push(validationRule[validationType[i]](e));
                     }
                 }
                 errorMsg(arrErrorMsg, e);
 
+                // エラーの無い物には 非エラーのClassを追加
                 if ($(e.target).hasClass(settings.errClass) === false) {
                     $(e.target).addClass(settings.okClass);
                 }
