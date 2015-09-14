@@ -3,10 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
+    <style type="text/css">
+
+        form{
+            display: block;
+            width: 640px;
+            margin: 100px auto;
+        }
+
+        .errBalloon{
+            width: auto;
+            height: 0;
+        }
+
+        .balloon{
+            position: absolute;
+            background: #000;
+            color: #fff;
+            font-size: 10px;
+            line-height: 1em;
+            padding: 5px 10px;
+            bottom: 5px;
+            border-radius: 5px;
+        }
+
+        .balloon:before{
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 10px 5px 0 5px;
+            border-color: #000000 transparent transparent transparent;
+            position: absolute;
+            bottom: -10px;
+            left: 10px;
+        }
+
+        .input
+
+    </style>
 </head>
 <body>
     <form>
-        <input type="text" pattern="^[0-9]+$" data-custom-validation="test01 test02" required><br>
+        <input type="text" pattern="^[0-9A-Za-z]+$" title="パターンエラー" data-custom-validation="test01 test02" required><br>
         <input type="text" pattern="^[0-9A-Za-z]+$" title="パターンエラー" required><br>
         <input type="text" pattern="^[0-9A-Za-z]+$" title="パターンエラー"><br>
         <input type="email" data-custom-validation="test01"><br>
@@ -37,11 +77,18 @@
                     return '指定されている形式で入力してください';
                 }
             }
-        return false;
-    },
+            return false;
+        },
         test01: function (e) {
-            if ($(e.target).val() === 'test') {
+            if($(e.target).val() === 'test') {
                 return '使用禁止';
+            } else {
+                return false;
+            }
+        },
+        test02: function (e) {
+            if($(e.target).val() === 'test') {
+                return '使用禁止2';
             } else {
                 return false;
             }

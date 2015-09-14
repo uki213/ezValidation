@@ -1,14 +1,14 @@
-/*global jQuery,console,validationRule */
+/*global jQuery, window, console, validationRule */
 (function ($) {
     'use strict';
     $.fn.ezValidation = function (options) {
 
         // 渡された任意のオプションで拡張されるデフォルトをいくつか作成する
         var settings = $.extend({
-            'event': 'keydown keyup change input',
-            'errClass': 'error',
-            'okClass': 'ok',
-            'baseDom': 'body'
+            'event': 'keydown keyup change input', // バリデーションを行うイベントを指定
+            'errClass': 'error', // エラー時に入力項目に付けるClass名
+            'okClass': 'ok', // 非エラー時に入力項目に付けるClass名
+            'baseDom': 'body' // エラーバルーンの土台を設置するDOM名
         }, options);
 
         return this.each(function () {
@@ -32,9 +32,14 @@
 
             // エラーポップアップ処理
             function errorMsg(msg, e) {
-                var index = $(e.target).index();
+                var index = $(e.target).index(), i, errMsgHtml = '';
                 $('#errBalloon' + index + ' *').remove();
-                $('#errBalloon' + index).html(msg);
+                if (msg.length !== 0) {
+                    for (i = 0; i < msg.length; i = i + 1) {
+                        errMsgHtml = errMsgHtml + '<div>' + msg[i] + '</div>';
+                    }
+                    $('#errBalloon' + index).html('<span class="balloon">' + errMsgHtml + '</span>');
+                }
             }
 
             function closeErrMsg(e) {
@@ -72,23 +77,6 @@
                     }
                 }
 
-                // エラー状態をinputにclassで反映
-                $(e.target).removeClass(settings.errClass).removeClass(settings.okClass);
-                for (i = 0; i < validationName.length; i = i + 1) {
-                    if (validationRule[validationName[i]] !== undefined && validationRule[validationName[i]](e) !== false) {
-                        $(e.target).addClass(settings.errClass);
-
-                        // エラーメッセージ呼び出し
-
-                        arrErrorMsg.push(validationRule[validationName[i]](e));
-                    }
-                }
-                errorMsg(arrErrorMsg, e);
-
-                if ($(e.target).hasClass(settings.errClass) === false) {
-                    $(e.target).addClass(settings.okClass);
-                }
-
                 // エラーバルーンの土台作成
                 function balloonPositionSet(e) {
                     var offset,
@@ -97,12 +85,30 @@
 
                     // DOM生成
                     if (!$('#errBalloon' + inputNum)[0]) {
-                        $(settings.baseDom).append('<span id="errBalloon' + inputNum + '"></span>');
+                        $(settings.baseDom).append('<div id="errBalloon' + inputNum + '" class="errBalloon"></div>');
                     }
                     $('#errBalloon' + inputNum).offset(offset);
 
                 }
                 balloonPositionSet(e);
+                $(window).resize(function () {
+                    balloonPositionSet(e);
+                });
+
+                // エラー状態をinputにclassで反映
+                $(e.target).removeClass(settings.errClass).removeClass(settings.okClass);
+                for (i = 0; i < validationName.length; i = i + 1) {
+                    if (validationRule[validationName[i]] !== undefined && validationRule[validationName[i]](e) !== false) {
+                        $(e.target).addClass(settings.errClass);
+                        // エラーメッセージ呼び出し
+                        arrErrorMsg.push(validationRule[validationName[i]](e));
+                    }
+                }
+                errorMsg(arrErrorMsg, e);
+
+                if ($(e.target).hasClass(settings.errClass) === false) {
+                    $(e.target).addClass(settings.okClass);
+                }
 
             });
 
