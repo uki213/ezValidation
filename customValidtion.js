@@ -17,6 +17,5 @@
             }
         }
     });
-    console.log($.validationRule);
 
 }(jQuery));

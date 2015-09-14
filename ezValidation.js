@@ -170,4 +170,6 @@ html5互換
 
 invalidは擬似要素をjQuerでコントロール出来ないので、Classで代用
 
+titleはreturnで設定しているエラーメッセージよりも優先される。
+
 */
