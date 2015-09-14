@@ -1,4 +1,5 @@
-/*global jQuery, window, console, validationRule */
+/*global jQuery, window, console */
+/*jslint regexp: true*/
 (function ($) {
     'use strict';
     $.fn.ezValidation = function (options) {
@@ -69,9 +70,9 @@
                 // custom-validationが存在しない時
                 if (validationType !== undefined) {
                     validationType = validationType.replace(/ /g, ',').split(',');
-                    validationType.push('default');
+                    validationType.push('defaultValidation');
                 } else {
-                    validationType = ['default'];
+                    validationType = ['defaultValidation'];
                 }
 
                 // エラーバルーンの土台作成
@@ -95,11 +96,10 @@
                 // エラー状態をinputにclassで反映
                 $(e.target).removeClass(settings.errClass).removeClass(settings.okClass);
                 for (i = 0; i < validationType.length; i = i + 1) {
-                    if (validationRule[validationType[i]] !== undefined && validationRule[validationType[i]](e) !== false) {
+                    if ($.validationRule[validationType[i]] !== undefined && $.validationRule[validationType[i]](e) !== false) {
                         $(e.target).addClass(settings.errClass);
-                        $(e.target).trigger('invalid');
                         // エラーメッセージ呼び出し
-                        arrErrorMsg.push(validationRule[validationType[i]](e));
+                        arrErrorMsg.push($.validationRule[validationType[i]](e));
                     }
                 }
                 errorMsg(arrErrorMsg, e);
@@ -116,9 +116,49 @@
 
             });
 
-            // function customValidtionJoin
+            // 標準バリデーション エラー出力関数
+            function errorMSG(MSG, e) {
+                if ($(e.target).attr('title') === undefined) {
+                    return MSG;
+                } else {
+                    return $(e.target).attr('title');
+                }
+            }
 
+            // 標準バリデーション
+            $.validationRule = $.extend($.validationRule, {
+                defaultValidation: function (e) {
+                    // required
+                    if ($(e.target).prop('required') === true && $(e.target).val() === '') {
+                        return '入力してください';
+                    }
+                    // pattern
+                    if ($(e.target).attr('pattern') !== undefined) {
+                        var pattern = new RegExp($(e.target).attr('pattern'), 'g');
+                        if (!$(e.target).val().match(pattern)) {
+                            return errorMSG('指定されている形式で入力してください', e);
+                        }
+                    }
+                    // type=email
+                    if (e.target.type === 'email') {
+                        if ($(e.target).val().match(/.+@.+\..+$/) === null) {
+                            return errorMSG('メールアドレスを入力してください', e);
+                        }
+                    }
+                    // type=url
+                    if (e.target.type === 'url') {
+                        if ($(e.target).val().match(/^[a-z]+:.+/) === null) {
+                            return errorMSG('URLを入力してください', e);
+                        }
+                    }
+                    // ブラウザ標準のバリデーション結果を取得
+                    if (e.target.validity.valid === false) {
+                        return errorMSG('指定されている形式で入力してください', e);
+                    }
 
+                    return false;
+                }
+            });
         });
 
     };

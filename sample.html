@@ -84,39 +84,7 @@
 </html>
 <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="ezValidation.js"></script>
-<script>
-    var validationRule = {
-        default: function (e) {
-            // required
-            if ($(e.target).prop('required') === true && $(e.target).val() === '') {
-                return '入力してください';
-                return false;
-            }
-            // pattern
-            if ($(e.target).attr('pattern') !== undefined) {
-                var pattern = new RegExp($(e.target).attr('pattern'), 'g');
-                if (!$(e.target).val().match(pattern)) {
-                    return '指定されている形式で入力してください';
-                }
-            }
-            return false;
-        },
-        test01: function (e) {
-            if($(e.target).val() === 'test') {
-                return '使用禁止';
-            } else {
-                return false;
-            }
-        },
-        test02: function (e) {
-            if($(e.target).val() === 'test') {
-                return '使用禁止2';
-            } else {
-                return false;
-            }
-        }
-    };
-</script>
+<script src="customValidtion.js"></script>
 <script>
     (function ($) {
         $('form').ezValidation();
