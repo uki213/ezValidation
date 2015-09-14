@@ -48,7 +48,7 @@
                 $('#errBalloon' + index + ' *').remove();
                 if (msg.length !== 0) {
                     for (i = 0; i < msg.length; i = i + 1) {
-                        errMsgHtml = errMsgHtml + '<div>' + msg[i] + '</div>';
+                        errMsgHtml = errMsgHtml + '<div>' + msg[i].replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '') + '</div>';
                     }
                     $('#errBalloon' + index).html('<span class="balloon">' + errMsgHtml + closeBtnDom + '</span>');
                 }
