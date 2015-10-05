@@ -42,7 +42,7 @@
                 $(e.target).trigger('validation');
             });
 
-            // エラーポップアップ処理
+            // バリデーション→エラーポップアップ表示
             function errorMsg(msg, e) {
                 var index = $(e.target).index(), i, errMsgHtml = '';
                 $('#errBalloon' + index + ' *').remove();
@@ -54,6 +54,7 @@
                 }
             }
 
+            // エラーバルーン消去
             function closeErrMsg(e) {
                 var index = $(e.target).index();
                 $('#errBalloon' + index).html();
@@ -95,6 +96,7 @@
 
                 // エラー状態をinputにclassで反映
                 $(e.target).removeClass(settings.errClass).removeClass(settings.okClass);
+
                 for (i = 0; i < validationType.length; i = i + 1) {
                     if ($.validationRule[validationType[i]] !== undefined && $.validationRule[validationType[i]](e) !== false) {
                         $(e.target).addClass(settings.errClass);
