@@ -12,19 +12,21 @@
         }
 
         .errBalloon {
-            width: auto;
-            height: 0;
+            width: 0;
         }
 
         .balloon {
             position: absolute;
-            background: #000;
-            color: #fff;
-            font-size: 10px;
-            line-height: 1em;
+            background-color: #fff;
+            color: #555;
+            font-size: 11px;
+            line-height: 1.2em;
             padding: 5px 10px;
+            left: 0;
             bottom: 5px;
-            border-radius: 5px;
+            border-radius: 2px;
+            word-break: keep-all;
+            border: 1px solid #555;
         }
 
         .balloon:before {
@@ -34,34 +36,67 @@
             height: 0;
             border-style: solid;
             border-width: 10px 5px 0 5px;
-            border-color: #000 transparent transparent transparent;
+            border-color: #555 transparent transparent transparent;
             position: absolute;
             bottom: -10px;
             left: 10px;
         }
 
+        .balloon:after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 9px 4px 0 4px;
+            border-color: #fff transparent transparent transparent;
+            position: absolute;
+            bottom: -9px;
+            left: 11px;
+        }
+
         .balloon .close {
             content: '×';
             display: block;
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             font-weight: 700;
             font-size: 10px;
-            line-height: 14px;
+            line-height: 12px;
             font-family: arial, sans-serif;
             position: absolute;
             right: -5px;
             top: -5px;
-            border-radius: 10px;
-            background: #000;
+            border-radius: 12px;
+            background: #fff;
             text-align: center;
             cursor: pointer;
+            border: 1px solid #777;
+        }
+
+        .right .balloon {
+            left: auto;
+            right: 0px;
+        }
+
+        .bottom .balloon {
+            bottom: auto;
+            top: 5px;
+        }
+
+        .bottom .balloon:before {
+            border-style: solid;
+            border-width: 0 5px 10px 5px;
+            border-color: transparent transparent #000 transparent;
+            position: absolute;
+            top: -10px;
+            left: 10px;
         }
 
         input.invalid ,
         select.invalid ,
         textarea.invalid {
-            outline: 2px solid #f66;
+            outline: 1px solid #f66;
         }
 
     </style>

@@ -10,6 +10,8 @@
             'errClass': 'invalid', // エラー時に入力項目に付けるClass名
             'okClass': 'valid', // 非エラー時に入力項目に付けるClass名
             'baseDom': 'body', // エラーバルーンの土台を設置するDOM名
+            'positionX': 'left', // エラーバルーン x座標（left or right）
+            'positionY': 'top', // エラーバルーン y座標（top or bottom）
             'closeButton': true // バルーンのクローズボタンの有無
         }, options);
 
@@ -20,12 +22,35 @@
                 customVali = 'custom-validation',
                 closeBtnDom = '<span class="close">×</span></span>';
 
-            $(this).attr('novalidate', 'novalidate'); // HTML5標準のバリデーションをオフ
-
-            // バルーンのクローズボタンの有無
-            if (settings.closeButton === false) {
-                closeBtnDom = '';
+            // バリデーション→エラーポップアップ表示
+            function errorMsg(msg, e) {
+                var index = $(e.target).index(), i, errMsgHtml = '';
+                $('#errBalloon' + index + ' *').remove();
+                if (msg.length !== 0) {
+                    for (i = 0; i < msg.length; i = i + 1) {
+                        errMsgHtml = errMsgHtml + '<div>' + msg[i].replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '') + '</div>'; // HTMLタグを除去してDOMを作成
+                    }
+                    if (settings.closeButton === false) {closeBtnDom = ''; } // バルーンのクローズボタンの有無
+                    $('#errBalloon' + index).html('<span class="balloon">' + errMsgHtml + closeBtnDom + '</span>');
+                }
             }
+
+            // エラーバルーン消去
+            function closeErrMsg(e) {
+                var index = $(e.target).index();
+                $('#errBalloon' + index).html();
+            }
+
+            // 標準バリデーション エラー出力関数
+            function errorMSG(MSG, e) {
+                if ($(e.target).attr('title') === undefined) {
+                    return MSG;
+                } else {
+                    return $(e.target).attr('title');
+                }
+            }
+
+            $(this).attr('novalidate', 'novalidate'); // HTML5標準のバリデーションをオフ
 
             // 送信機能
             $(this).on('submit', function () {
@@ -41,24 +66,6 @@
             $(this).find(inputDom).on(settings.event, function (e) {
                 $(e.target).trigger('validation');
             });
-
-            // バリデーション→エラーポップアップ表示
-            function errorMsg(msg, e) {
-                var index = $(e.target).index(), i, errMsgHtml = '';
-                $('#errBalloon' + index + ' *').remove();
-                if (msg.length !== 0) {
-                    for (i = 0; i < msg.length; i = i + 1) {
-                        errMsgHtml = errMsgHtml + '<div>' + msg[i].replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '') + '</div>'; // HTMLタグを除去してDOMを作成
-                    }
-                    $('#errBalloon' + index).html('<span class="balloon">' + errMsgHtml + closeBtnDom + '</span>');
-                }
-            }
-
-            // エラーバルーン消去
-            function closeErrMsg(e) {
-                var index = $(e.target).index();
-                $('#errBalloon' + index).html();
-            }
 
             // カスタムバリデーション
             $(this).on('validation', inputDom, function (e) {
@@ -79,16 +86,30 @@
                 // エラーバルーンの土台作成
                 function balloonPositionSet(e) {
                     var offset,
+                        balloonWidth = $(e.target).outerWidth(),
+                        balloonHeight = $(e.target).outerHeight(),
                         inputNum = $(e.target).index();
+
+                    // 土台座標作成
                     offset = $(e.target).offset();
+                    // バルーンを右にする
+                    if (settings.positionX === 'right') {
+                        offset.left = offset.left + balloonWidth;
+                    }
+                    // バルーンを下にする
+                    if (settings.positionY === 'bottom') {
+                        offset.top = offset.top + balloonHeight;
+                    }
 
                     // DOM生成
                     if (!$('#errBalloon' + inputNum)[0]) {
                         $(settings.baseDom).append('<div id="errBalloon' + inputNum + '" class="errBalloon"></div>');
                     }
-                    $('#errBalloon' + inputNum).offset(offset);
+                    $('#errBalloon' + inputNum).offset(offset).addClass(settings.positionX).addClass(settings.positionY);
 
                 }
+
+                // windowサイズが変わった時に土台の位置を調整する
                 balloonPositionSet(e);
                 $(window).resize(function () {
                     balloonPositionSet(e);
@@ -118,16 +139,7 @@
 
             });
 
-            // 標準バリデーション エラー出力関数
-            function errorMSG(MSG, e) {
-                if ($(e.target).attr('title') === undefined) {
-                    return MSG;
-                } else {
-                    return $(e.target).attr('title');
-                }
-            }
-
-            // 標準バリデーション
+            // HTML5 標準バリデーション
             $.validationRule = $.extend($.validationRule, {
                 defaultValidation: function (e) {
                     // required
