@@ -63,11 +63,11 @@
 .errBalloon .balloon .close:after{
 	content: '';
 	display: block;
-	width: 10px;
+	width: 8px;
 	height: 1px;
 	background: #555;
 	position: absolute;
-	left: 1px;
+	left: 2px;
 	top: 5.5px;
 	transform: rotate(45deg);
 }
@@ -75,11 +75,11 @@
 .errBalloon .balloon .close:before{
 	content: '';
 	display: block;
-	width: 10px;
+	width: 8px;
 	height: 1px;
 	background: #555;
 	position: absolute;
-	left: 1px;
+	left: 2px;
 	top: 5.5px;
 	transform: rotate(-45deg);
 }
