@@ -4,35 +4,52 @@
     'use strict';
     $.fn.ezValidation = function (options) {
 
-        // プラグインオプション
-        var settings = $.extend({
-            'event': 'keydown keyup change input', // バリデーションを行うイベントを指定
-            'errClass': 'invalid', // エラー時に入力項目に付けるClass名
-            'okClass': 'valid', // 非エラー時に入力項目に付けるClass名
-            'baseDom': 'body', // エラーバルーンの土台を設置するDOM名
-            'positionX': 'left', // エラーバルーン x座標（left or right）
-            'positionY': 'top', // エラーバルーン y座標（top or bottom）
-            'closeButton': true, // バルーンのクローズボタンの有無
-            'fadeSpeed': 200 // エラーバルーン フェードアニメーションの速度（ms）
-        }, options);
+        // 初期設定
+        var inputDom = 'input, select, textarea',
+            customVali = 'custom-validation',
+            closeBtnDom = '<span class="close">×</span></span>',
+
+            // プラグインオプション
+            settings = $.extend({
+                'event': 'keydown keyup change input', // バリデーションを行うイベントを指定
+                'errClass': 'invalid', // エラー時に入力項目に付けるClass名
+                'okClass': 'valid', // 非エラー時に入力項目に付けるClass名
+                'baseDom': 'body', // エラーバルーンの土台を設置するDOM名
+                'positionX': 'left', // エラーバルーン x座標（left or right）
+                'positionY': 'top', // エラーバルーン y座標（top or bottom）
+                'closeButton': true, // バルーンのクローズボタンの有無
+                'fadeSpeed': 100, // エラーバルーン フェードアニメーションの速度（ms）
+                'submit': function () {
+                    $(inputDom).trigger('validation');
+                    if ($(inputDom).hasClass(settings.errClass) === true) {
+                        return false;
+                    }
+                }
+            }, options);
 
         return this.each(function () {
-
-            // 初期設定
-            var inputDom = 'input, select, textarea',
-                customVali = 'custom-validation',
-                closeBtnDom = '<span class="close">×</span></span>';
 
             // バリデーション→エラーポップアップ表示
             function errorMsg(msg, e) {
                 var index = $(e.target).index(), i, errMsgHtml = '';
-                $('#errBalloon' + index + ' *').remove();
                 if (msg.length !== 0) {
                     for (i = 0; i < msg.length; i = i + 1) {
-                        errMsgHtml = errMsgHtml + '<div>' + msg[i].replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '') + '</div>'; // HTMLタグを除去してDOMを作成
+                        // HTMLタグを除去してエラーメッセージを作成
+                        errMsgHtml = errMsgHtml + '<div>' + msg[i].replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '') + '</div>';
                     }
-                    if (settings.closeButton === false) {closeBtnDom = ''; } // バルーンのクローズボタンの有無
-                    $('#errBalloon' + index).html('<span class="balloon">' + errMsgHtml + closeBtnDom + '</span>').fadeOut(0).fadeIn(settings.fadeSpeed);
+                    $('#errBalloon' + index)
+                        .find('.balloon')
+                        .show()
+                        .find('.errMsg')
+                        .html(errMsgHtml);
+                    $('#errBalloon' + index)
+                        .stop()
+                        .fadeTo(settings.fadeSpeed, 1);
+                } else {
+                    $('#errBalloon' + index)
+                        .stop().fadeTo(settings.fadeSpeed, 0, function () {
+                            $(this).find('.balloon').hide();
+                        });
                 }
             }
 
@@ -55,10 +72,7 @@
 
             // 送信機能
             $(this).on('submit', function () {
-                $(inputDom).trigger('validation');
-
-                // バリデーションエラーが有った場合は submit 処理を中断する。
-                if ($(inputDom).hasClass(settings.errClass) === true) {
+                if (settings.submit() === false) {
                     return false;
                 }
             });
@@ -70,6 +84,7 @@
 
             // カスタムバリデーション
             $(this).on('validation', inputDom, function (e) {
+                e.stopPropagation();
                 var i,
                     arrErrorMsg = [],
                     validationType;
@@ -84,7 +99,7 @@
                     validationType = ['defaultValidation'];
                 }
 
-                // エラーバルーンの土台作成
+                // balloonの土台作成の関数
                 function balloonPositionSet(e) {
                     var offset,
                         balloonWidth = $(e.target).outerWidth(),
@@ -104,16 +119,39 @@
 
                     // DOM生成
                     if (!$('#errBalloon' + inputNum)[0]) {
-                        $(settings.baseDom).append('<div id="errBalloon' + inputNum + '" class="errBalloon"></div>');
+
+                        // バルーンのクローズボタンの有無
+                        if (settings.closeButton === false) {
+                            closeBtnDom = '';
+                        }
+
+                        // balloonのDOMを生成
+                        $(settings.baseDom).append('<div id="errBalloon' + inputNum + '" class="errBalloon"><span class="balloon"><span class="errMsg"></span>' + closeBtnDom + '</span></div>');
+                        $('#errBalloon' + inputNum)
+                            .stop().fadeTo(0, 0, function () {
+                                $(this).find('.balloon').hide();
+                            })
+                            // balloonの閉じるボタンにイベントを設定
+                            .on('click', '.close', function () {
+                                $(this).parents('.errBalloon').stop().fadeTo(settings.fadeSpeed, 0, function () {
+                                    $(this).children('.balloon').hide();
+                                });
+                            });
                     }
-                    $('#errBalloon' + inputNum).offset(offset).addClass(settings.positionX).addClass(settings.positionY);
+
+                    // balloonの位置を設定
+                    $('#errBalloon' + inputNum)
+                        .stop()
+                        .offset(offset)
+                        .addClass(settings.positionX)
+                        .addClass(settings.positionY);
 
                 }
 
-                // windowサイズが変わった時に土台の位置を調整する
+                // balloonの土台作成の関数を呼ぶ
                 balloonPositionSet(e);
                 $(window).resize(function () {
-                    balloonPositionSet(e);
+                    balloonPositionSet(e); // リサイズ時に再実行
                 });
 
                 // エラー状態をinputにclassで反映
@@ -133,25 +171,20 @@
                     $(e.target).addClass(settings.okClass);
                 }
 
-                // balloonの☓ボタン
-                $('body').on('click', '.close', function (e) {
-                    $(e.target).parents('.balloon').fadeOut(settings.fadeSpeed, function () {
-                        $(this).remove();
-                    });
-                });
-
             });
 
             // HTML5 標準バリデーション
             $.validationRule = $.extend($.validationRule, {
                 defaultValidation: function (e) {
-                    // required
-                    if ($(e.target).prop('required') === true && $(e.target).val() === '') {
+                    var validityValid,
+                        pattern;
+
+                    if ($(e.target).attr('required') === 'required' && $(e.target).val() === '') {
                         return '入力してください';
                     }
                     // pattern
                     if ($(e.target).attr('pattern') !== undefined) {
-                        var pattern = new RegExp($(e.target).attr('pattern'), 'g');
+                        pattern = new RegExp($(e.target).attr('pattern'), 'g');
                         if (!$(e.target).val().match(pattern) && $(e.target).val() !== '') {
                             return errorMSG('指定されている形式で入力してください', e);
                         }
@@ -169,7 +202,12 @@
                         }
                     }
                     // ブラウザ標準のバリデーション結果を取得
-                    if (e.target.validity.valid === false) {
+                    if (typeof (e.target.validity) !== 'undefined') {
+                        validityValid = e.target.validity.valid;
+                    } else {
+                        validityValid = true;
+                    }
+                    if (validityValid === false) {
                         return errorMSG('指定されている形式で入力してください', e);
                     }
                     return false;
