@@ -1,0 +1,113 @@
+.errBalloon {
+	width: 0;
+}
+
+.errBalloon .balloon {
+	position: absolute;
+	background-color: #fff;
+	color: #555;
+	font-size: 11px;
+	line-height: 1.2em;
+	padding: 5px 10px;
+	left: 0;
+	bottom: 5px;
+	border-radius: 2px;
+	word-break: keep-all;
+	border: 1px solid #555;
+}
+
+.errBalloon .balloon:before {
+	content: '';
+	display: block;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 10px 5px 0 5px;
+	border-color: #555 transparent transparent transparent;
+	position: absolute;
+	bottom: -10px;
+	left: 10px;
+}
+
+.errBalloon .balloon:after {
+	content: '';
+	display: block;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 9px 4px 0 4px;
+	border-color: #fff transparent transparent transparent;
+	position: absolute;
+	bottom: -9px;
+	left: 11px;
+}
+
+.errBalloon .balloon .close {
+	display: block;
+	width: 12px;
+	height: 12px;
+	font-weight: 700;
+	font-size: 10px;
+	line-height: 12px;
+	font-family: arial, sans-serif;
+	position: absolute;
+	right: -5px;
+	top: -5px;
+	border-radius: 12px;
+	background: #fff;
+	text-align: center;
+	cursor: pointer;
+	border: 1px solid #777;
+}
+
+.errBalloon .balloon .close:after{
+	content: '';
+	display: block;
+	width: 10px;
+	height: 1px;
+	background: #555;
+	position: absolute;
+	left: 1px;
+	top: 5.5px;
+	transform: rotate(45deg);
+}
+
+.errBalloon .balloon .close:before{
+	content: '';
+	display: block;
+	width: 10px;
+	height: 1px;
+	background: #555;
+	position: absolute;
+	left: 1px;
+	top: 5.5px;
+	transform: rotate(-45deg);
+}
+
+.errBalloon.right .balloon {
+	left: auto;
+	right: 0px;
+}
+
+.errBalloon.bottom .balloon {
+	bottom: auto;
+	top: 5px;
+}
+
+.errBalloon.bottom .balloon:before {
+	border-style: solid;
+	border-width: 0 5px 10px 5px;
+	border-color: transparent transparent #555 transparent;
+	position: absolute;
+	top: -10px;
+	left: 10px;
+}
+
+.errBalloon.bottom .balloon:after {
+	border-style: solid;
+	border-width: 0 4px 9px 4px;
+	border-color: transparent transparent #fff transparent;
+	position: absolute;
+	top: -9px;
+	left: 11px;
+}

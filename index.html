@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+
+        form {
+            display: block;
+            width: 640px;
+            margin: 100px auto;
+        }
+
+        input.invalid ,
+        select.invalid ,
+        textarea.invalid {
+            outline: 1px solid #f66;
+        }
+    </style>
+	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="js/$.ezValidation.js"></script>
+	<script src="js/$.customValidtion.js"></script>
+	<script>
+		(function ($) {
+			$(document).ready(function(){
+
+				$('form').ezValidation();
+
+			});
+		}(jQuery));
+	</script>
+</head>
+<body>
+    <form>
+        <input type="text" pattern="^[0-9A-Za-z]+$" title="titleタグの内容になります" data-custom-validation="test01 test02" required><br>
+        <input type="text" pattern="^[0-9A-Za-z]+$" title="パターンエラー" required><br>
+        <input type="text" pattern="^[0-9A-Za-z]+$"><br>
+        <input type="email" data-custom-validation="test01"><br>
+        <input type="url" required><br>
+        <input type="number"><br>
+        <input type="tel"><br>
+
+        <input type="submit" value="submit">
+    </form>
+
+
+</body>
+</html>
+
+
