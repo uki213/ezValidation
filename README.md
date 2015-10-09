@@ -59,30 +59,46 @@ retrun false の場合はエラーが無いという処理になります。
     'event':'keydown keyup change input'
 バリデーションを行うイベントを指定します。
 
+***
+
     'errClass': 'invalid'
 エラー時に入力項目に付けるクラス名です。
+
+***
 
     'okClass': 'valid'
 チェック通過時に入力項目に付けるクラス名です。
 
+***
+
     'baseDom': 'body'
 エラーバルーンの土台を設置するDOM要素名になります。
+
+***
 
     'positionX': 'left'
 入力項目に対してのエラーバルーンの**横軸**の位置を指定します。  
 入力する値は「left」または「right」です。
 
+***
+
     'positionY': 'top'
 入力項目に対してのエラーバルーンの**縦軸**の位置を指定します。  
 入力する値は「top」または「bottom」です。
+
+***
 
     'closeButton': true
 エラーバルーンに閉じるボタンを取り付けます。  
 デフォルトでは「true」になります。「false」の場合はチェックが通過するまで消えません。
 
+***
+
     'fadeSpeed': 100
 エラーバルーンの表示・非表示のフェードアニメーションの時間になります。  
 時間の単位はマイクロ秒単位になります。
+
+***
 
     'submit': function () {
         $(inputDom).trigger('validation');
