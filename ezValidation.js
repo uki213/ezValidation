@@ -12,7 +12,8 @@
             'baseDom': 'body', // エラーバルーンの土台を設置するDOM名
             'positionX': 'left', // エラーバルーン x座標（left or right）
             'positionY': 'top', // エラーバルーン y座標（top or bottom）
-            'closeButton': true // バルーンのクローズボタンの有無
+            'closeButton': true, // バルーンのクローズボタンの有無
+            'fadeSpeed': 200 // エラーバルーン フェードアニメーションの速度（ms）
         }, options);
 
         return this.each(function () {
@@ -31,7 +32,7 @@
                         errMsgHtml = errMsgHtml + '<div>' + msg[i].replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '') + '</div>'; // HTMLタグを除去してDOMを作成
                     }
                     if (settings.closeButton === false) {closeBtnDom = ''; } // バルーンのクローズボタンの有無
-                    $('#errBalloon' + index).html('<span class="balloon">' + errMsgHtml + closeBtnDom + '</span>');
+                    $('#errBalloon' + index).html('<span class="balloon">' + errMsgHtml + closeBtnDom + '</span>').fadeOut(0).fadeIn(settings.fadeSpeed);
                 }
             }
 
@@ -134,7 +135,9 @@
 
                 // balloonの☓ボタン
                 $('body').on('click', '.close', function (e) {
-                    $(e.target).parents('.balloon').remove();
+                    $(e.target).parents('.balloon').fadeOut(settings.fadeSpeed, function () {
+                        $(this).remove();
+                    });
                 });
 
             });
