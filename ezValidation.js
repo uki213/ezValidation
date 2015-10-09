@@ -7,7 +7,7 @@
         // 初期設定
         var inputDom = 'input, select, textarea',
             customVali = 'custom-validation',
-            closeBtnDom = '<span class="close">×</span></span>',
+            closeBtnDom = '<span class="close"></span>',
 
             // プラグインオプション
             settings = $.extend({

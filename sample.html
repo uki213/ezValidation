@@ -56,7 +56,6 @@
         }
 
         .balloon .close {
-            content: '×';
             display: block;
             width: 12px;
             height: 12px;
@@ -74,6 +73,29 @@
             border: 1px solid #777;
         }
 
+        .balloon .close:after{
+            content: '';
+            display: block;
+            width: 10px;
+            height: 1px;
+            background: #555;
+            position: absolute;
+            left: 1px;
+            top: 5.5px;
+            transform: rotate(45deg);
+        }
+
+        .balloon .close:before{
+            content: '';
+            display: block;
+            width: 10px;
+            height: 1px;
+            background: #555;
+            position: absolute;
+            left: 1px;
+            top: 5.5px;
+            transform: rotate(-45deg);
+        }
         .right .balloon {
             left: auto;
             right: 0px;
