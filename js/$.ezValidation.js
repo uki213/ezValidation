@@ -37,26 +37,11 @@
                         // HTMLタグを除去してエラーメッセージを作成
                         errMsgHtml = errMsgHtml + '<div>' + msg[i].replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '') + '</div>';
                     }
-                    $('#errBalloon' + index)
-                        .find('.balloon')
-                        .show()
-                        .find('.errMsg')
-                        .html(errMsgHtml);
-                    $('#errBalloon' + index)
-                        .stop()
-                        .fadeTo(settings.fadeSpeed, 1);
+					$('#errBalloon' + index).find('.errMsg').html(errMsgHtml);
+					$('#errBalloon' + index).trigger('open');
                 } else {
-                    $('#errBalloon' + index)
-                        .stop().fadeTo(settings.fadeSpeed, 0, function () {
-                            $(this).find('.balloon').hide();
-                        });
+                    $('#errBalloon' + index).trigger('close');
                 }
-            }
-
-            // エラーバルーン消去
-            function closeErrMsg(e) {
-                var index = $(e.target).index();
-                $('#errBalloon' + index).html();
             }
 
             // 標準バリデーション エラー出力関数
@@ -133,10 +118,19 @@
                             })
                             // balloonの閉じるボタンにイベントを設定
                             .on('click', '.close', function () {
-                                $(this).parents('.errBalloon').stop().fadeTo(settings.fadeSpeed, 0, function () {
-                                    $(this).children('.balloon').hide();
-                                });
-                            });
+								$(this).parents('.errBalloon').trigger('close');
+                            })
+							// balloonのクローズ機能（イベントドリブン）
+							.on('close', function () {
+								$(this).stop().fadeTo(settings.fadeSpeed, 0, function () {
+									$(this).children('.balloon').hide();
+								});
+							})
+							// balloonのオープン機能（イベントドリブン）
+							.on('open', function () {
+								$(this).find('.balloon').show();
+								$(this).stop().fadeTo(settings.fadeSpeed, 1);
+							});
                     }
 
                     // balloonの位置を設定
