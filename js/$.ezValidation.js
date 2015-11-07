@@ -19,12 +19,13 @@
                 'positionY': 'top', // エラーバルーン y座標（top or bottom）
                 'closeButton': true, // バルーンのクローズボタンの有無
                 'fadeSpeed': 100, // エラーバルーン フェードアニメーションの速度（ms）
-                'submit': function () {
-                    $(inputDom).trigger('validation');
+                'submit': function (e) {
+                    $(e.target).find(inputDom).trigger('validation');
                     if ($(inputDom).hasClass(settings.errClass) === true) {
                         return false;
                     }
-                }
+                },
+				'defaultValidation': true
             }, options);
 
         return this.each(function () {
@@ -56,8 +57,8 @@
             $(this).attr('novalidate', 'novalidate'); // HTML5標準のバリデーションをオフ
 
             // 送信機能
-            $(this).on('submit', function () {
-                if (settings.submit() === false) {
+            $(this).on('submit', function (e) {
+                if (settings.submit(e) === false) {
                     return false;
                 }
             });
@@ -173,37 +174,39 @@
                     var validityValid,
                         pattern;
 
-                    if ($(e.target).attr('required') === 'required' && $(e.target).val() === '') {
-                        return '入力してください';
-                    }
-                    // pattern
-                    if ($(e.target).attr('pattern') !== undefined) {
-                        pattern = new RegExp($(e.target).attr('pattern'), 'g');
-                        if (!$(e.target).val().match(pattern) && $(e.target).val() !== '') {
-                            return errorMSG('指定されている形式で入力してください', e);
-                        }
-                    }
-                    // type=email
-                    if (e.target.type === 'email') {
-                        if ($(e.target).val().match(/.+@.+\..+$/) === null && $(e.target).val() !== '') {
-                            return errorMSG('メールアドレスを入力してください', e);
-                        }
-                    }
-                    // type=url
-                    if (e.target.type === 'url') {
-                        if ($(e.target).val().match(/^[a-z]+:.+/) === null && $(e.target).val() !== '') {
-                            return errorMSG('URLを入力してください', e);
-                        }
-                    }
-                    // ブラウザ標準のバリデーション結果を取得
-                    if (typeof (e.target.validity) !== 'undefined') {
-                        validityValid = e.target.validity.valid;
-                    } else {
-                        validityValid = true;
-                    }
-                    if (validityValid === false) {
-                        return errorMSG('指定されている形式で入力してください', e);
-                    }
+					if ($(e.target).attr('required') === 'required' && $(e.target).val() === '') {
+						return '入力してください';
+					}
+					// pattern
+					if ($(e.target).attr('pattern') !== undefined) {
+						pattern = new RegExp($(e.target).attr('pattern'), 'g');
+						if (!$(e.target).val().match(pattern) && $(e.target).val() !== '') {
+							return errorMSG('指定されている形式で入力してください', e);
+						}
+					}
+					if (settings.defaultValidation === true) {
+						// type=email
+						if (e.target.type === 'email') {
+							if ($(e.target).val().match(/.+@.+\..+$/) === null && $(e.target).val() !== '') {
+								return errorMSG('メールアドレスを入力してください', e);
+							}
+						}
+						// type=url
+						if (e.target.type === 'url') {
+							if ($(e.target).val().match(/^[a-z]+:.+/) === null && $(e.target).val() !== '') {
+								return errorMSG('URLを入力してください', e);
+							}
+						}
+						// ブラウザ標準のバリデーション結果を取得
+						if (typeof (e.target.validity) !== 'undefined') {
+							validityValid = e.target.validity.valid;
+						} else {
+							validityValid = true;
+						}
+						if (validityValid === false) {
+							return errorMSG('指定されている形式で入力してください', e);
+						}
+					}
                     return false;
                 }
             });

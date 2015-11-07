@@ -100,19 +100,22 @@ retrun false の場合はエラーが無いという処理になります。
 
 ***
 
-    'submit': function () {
-        $(inputDom).trigger('validation');
+    'submit': function (e) {
+        $(e.target).find(inputDom).trigger('validation');
         if ($(inputDom).hasClass(settings.errClass) === true) {
             return false;
         }
     }
 送信ボタンを押した際の匿名関数になります。  
+イベントオブジェクト（e）で送信されたフォームが取得できます。  
 デフォルトでは上記の設定がされています。  
-送信ボタンを押した際の挙動を変更したい場合は、独自の匿名関数を設定します。  
+送信ボタンを押した際の挙動を変更したい場合は、この部分を変更します。 
 retrun falseを行うと、フォームの送信を行いません。
 
 ## LICENCE
 
-自由。ただしこのプログラム単体そのもので利益をえるような行為はNG
-[http://uki213.github.io/ezValidation/](http://uki213.github.io/ezValidation/)
+[MIT License](http://opensource.org/licenses/mit-license.php)
+
+## DEMO
+
 [https://github.com/uki213/ezValidation](https://github.com/uki213/ezValidation)
