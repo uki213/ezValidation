@@ -118,4 +118,4 @@ retrun falseを行うと、フォームの送信を行いません。
 
 ## DEMO
 
-[https://github.com/uki213/ezValidation](https://github.com/uki213/ezValidation)
+[http://uki213.github.io/ezValidation/](http://uki213.github.io/ezValidation/)
