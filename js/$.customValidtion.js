@@ -21,7 +21,7 @@
 		},
 		// 半角文字禁止
 		chkzenkaku: function (e) {
-			if ($(e.target).val().match(/^(?:[a-zA-Z0-9@<>\;\:\[\]\{\}\|\^\=\/\!\*\"\#\$\+\%\&\'\(\)\,\.\-\_\?\\\s]+)*$/) !== null) {
+			if ($(e.target).val().match(/^(?:[a-zA-Z0-9@<>\;\:\[\]\{\}\|\^\=\/\!\*\"\#\$\+\%\&\'\(\)\,\.\-\_\?\\\s]+)*$/) !== null && $(e.target).val() !== '') {
 				return '全角文字で入力してください';
 			} else {
 				return false;
@@ -59,10 +59,10 @@
 				return false;
 			}
 		},
-		// ふりがな
+		// 英数字（小文字）
 		chknocaps: function (e) {
 			if ($(e.target).val().match(/^(?:[a-z0-9]+)*$/) === null) {
-				return '英数字(小文字のみ)で入力してください"';
+				return '英数字(小文字のみ)で入力してください';
 			} else {
 				return false;
 			}
