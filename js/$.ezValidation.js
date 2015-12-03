@@ -25,21 +25,21 @@
                         return false;
                     }
                 },
-				'defaultValidation': true
+                'defaultValidation': true
             }, options);
 
         return this.each(function () {
 
             // バリデーション→エラーポップアップ表示
             function errorMsg(msg, e) {
-                var index = $(e.target).index(), i, errMsgHtml = '';
+                var index = $(e.target).index(inputDom), i, errMsgHtml = '';
                 if (msg.length !== 0) {
                     for (i = 0; i < msg.length; i = i + 1) {
                         // HTMLタグを除去してエラーメッセージを作成
                         errMsgHtml = errMsgHtml + '<div>' + msg[i].replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '') + '</div>';
                     }
-					$('#errBalloon' + index).find('.errMsg').html(errMsgHtml);
-					$('#errBalloon' + index).trigger('open');
+                    $('#errBalloon' + index).find('.errMsg').html(errMsgHtml);
+                    $('#errBalloon' + index).trigger('open');
                 } else {
                     $('#errBalloon' + index).trigger('close');
                 }
@@ -90,7 +90,7 @@
                     var offset,
                         balloonWidth = $(e.target).outerWidth(),
                         balloonHeight = $(e.target).outerHeight(),
-                        inputNum = $(e.target).index();
+                        inputNum = $(e.target).index(inputDom);
 
                     // 土台座標作成
                     offset = $(e.target).offset();
@@ -115,23 +115,23 @@
                         $(settings.baseDom).append('<div id="errBalloon' + inputNum + '" class="errBalloon"><span class="balloon"><span class="errMsg"></span>' + closeBtnDom + '</span></div>');
                         $('#errBalloon' + inputNum)
                             .stop().fadeTo(0, 0, function () {
-                                $(this).find('.balloon').hide();
-                            })
-                            // balloonの閉じるボタンにイベントを設定
+                            $(this).find('.balloon').hide();
+                        })
+                        // balloonの閉じるボタンにイベントを設定
                             .on('click', '.close', function () {
-								$(this).parents('.errBalloon').trigger('close');
-                            })
-							// balloonのクローズ機能（イベントドリブン）
-							.on('close', function () {
-								$(this).stop().fadeTo(settings.fadeSpeed, 0, function () {
-									$(this).children('.balloon').hide();
-								});
-							})
-							// balloonのオープン機能（イベントドリブン）
-							.on('open', function () {
-								$(this).find('.balloon').show();
-								$(this).stop().fadeTo(settings.fadeSpeed, 1);
-							});
+                            $(this).parents('.errBalloon').trigger('close');
+                        })
+                        // balloonのクローズ機能（イベントドリブン）
+                            .on('close', function () {
+                            $(this).stop().fadeTo(settings.fadeSpeed, 0, function () {
+                                $(this).children('.balloon').hide();
+                            });
+                        })
+                        // balloonのオープン機能（イベントドリブン）
+                            .on('open', function () {
+                            $(this).find('.balloon').show();
+                            $(this).stop().fadeTo(settings.fadeSpeed, 1);
+                        });
                     }
 
                     // balloonの位置を設定
@@ -174,39 +174,39 @@
                     var validityValid,
                         pattern;
 
-					if ($(e.target).attr('required') === 'required' && $(e.target).val() === '') {
-						return '入力してください';
-					}
-					// pattern
-					if ($(e.target).attr('pattern') !== undefined) {
-						pattern = new RegExp($(e.target).attr('pattern'), 'g');
-						if (!$(e.target).val().match(pattern) && $(e.target).val() !== '') {
-							return errorMSG('指定されている形式で入力してください', e);
-						}
-					}
-					if (settings.defaultValidation === true) {
-						// type=email
-						if (e.target.type === 'email') {
-							if ($(e.target).val().match(/.+@.+\..+$/) === null && $(e.target).val() !== '') {
-								return errorMSG('メールアドレスを入力してください', e);
-							}
-						}
-						// type=url
-						if (e.target.type === 'url') {
-							if ($(e.target).val().match(/^[a-z]+:.+/) === null && $(e.target).val() !== '') {
-								return errorMSG('URLを入力してください', e);
-							}
-						}
-						// ブラウザ標準のバリデーション結果を取得
-						if (typeof (e.target.validity) !== 'undefined') {
-							validityValid = e.target.validity.valid;
-						} else {
-							validityValid = true;
-						}
-						if (validityValid === false) {
-							return errorMSG('指定されている形式で入力してください', e);
-						}
-					}
+                    if ($(e.target).attr('required') === 'required' && $(e.target).val() === '') {
+                        return '入力してください';
+                    }
+                    // pattern
+                    if ($(e.target).attr('pattern') !== undefined) {
+                        pattern = new RegExp($(e.target).attr('pattern'), 'g');
+                        if (!$(e.target).val().match(pattern) && $(e.target).val() !== '') {
+                            return errorMSG('指定されている形式で入力してください', e);
+                        }
+                    }
+                    if (settings.defaultValidation === true) {
+                        // type=email
+                        if (e.target.type === 'email') {
+                            if ($(e.target).val().match(/.+@.+\..+$/) === null && $(e.target).val() !== '') {
+                                return errorMSG('メールアドレスを入力してください', e);
+                            }
+                        }
+                        // type=url
+                        if (e.target.type === 'url') {
+                            if ($(e.target).val().match(/^[a-z]+:.+/) === null && $(e.target).val() !== '') {
+                                return errorMSG('URLを入力してください', e);
+                            }
+                        }
+                        // ブラウザ標準のバリデーション結果を取得
+                        if (typeof (e.target.validity) !== 'undefined') {
+                            validityValid = e.target.validity.valid;
+                        } else {
+                            validityValid = true;
+                        }
+                        if (validityValid === false) {
+                            return errorMSG('指定されている形式で入力してください', e);
+                        }
+                    }
                     return false;
                 }
             });
