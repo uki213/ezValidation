@@ -64,7 +64,7 @@
             });
 
             // 各イベントを一つのイベントへ統一する
-            $(this).find(inputDom).on(settings.event, function (e) {
+			$(this).on(settings.event, inputDom, function (e) {
                 $(e.target).trigger('validation');
             });
 
