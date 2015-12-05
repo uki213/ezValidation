@@ -37,13 +37,13 @@ pattern要素とtitle要素でバリデーションを記述することが出�
 $.ezValidation.jsのvalid、invalidはIE9以下でも動作します。
 
 擬似関数を利用した使用した場合は以下の様な記述になります。
-    input:valid { boder:green 1px solid };
-    input:invalid { boder:red 1px solid };
+    input:valid { boder:green 1px solid };  
+    input:invalid { boder:red 1px solid };  
 この場合はバリデーションを行い、問題なければ緑、エラー時は赤線をinputに反映します。
 
 $.ezValidation.jsでは以下の様な記述になります。
-    input.valid { boder:green 1px solid };
-    input.invalid { boder:red 1px solid };
+    input.valid { boder:green 1px solid };  
+    input.invalid { boder:red 1px solid };  
 置き換えは、擬似クラス「:」を通常のクラスにするだけになります「.」
 
 ## $.customValidtion.js （カスタムバリデーション）
@@ -56,7 +56,7 @@ retrun false の場合はエラーが無いという処理になります。
 ## プラグインオプション
 プラグインのオプションは以下になります。
 
-    'event':'keydown keyup change input'
+    'event':'keydown keyup change'
 バリデーションを行うイベントを指定します。
 
 ***
