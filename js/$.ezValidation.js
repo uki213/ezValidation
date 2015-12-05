@@ -9,11 +9,12 @@
 		var inputDom = 'input, select, textarea',
 			customVali = 'custom-validation',
 			closeBtnDom = '<span class="close"></span>',
+			sendInputDelay,
 			$this = $(this),
 
 			// プラグインオプション
 			settings = $.extend({
-				'event': 'keydown keyup change', // バリデーションを行うイベントを指定
+				'event': 'keydown keyup keypress change', // バリデーションを行うイベントを指定
 				'errClass': 'invalid', // エラー時に入力項目に付けるClass名
 				'okClass': 'valid', // 非エラー時に入力項目に付けるClass名
 				'baseDom': 'body', // エラーバルーンの土台を設置するDOM名
@@ -67,7 +68,9 @@
 
 			// 各イベントを一つのイベントへ統一する
 			$(this).on(settings.event, inputDom, function (e) {
-				$(e.target).trigger('validation');
+				sendInputDelay = setTimeout(function () {
+					$(e.target).trigger('validation');
+				}, 10);
 				// e.stopPropagation();
 			});
 
