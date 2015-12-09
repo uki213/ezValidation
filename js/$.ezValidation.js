@@ -1,4 +1,4 @@
-/*global jQuery, window */
+/*global jQuery, window, MutationObserver, setTimeout */
 /*jslint regexp: true*/
 /*JSCS */
 (function ($) {
@@ -10,6 +10,7 @@
 			customVali = 'custom-validation',
 			closeBtnDom = '<span class="close"></span>',
 			sendInputDelay,
+			timerBalloonPos,
 			$this = $(this),
 
 			// プラグインオプション
@@ -78,6 +79,36 @@
 				$this.trigger('setPosBalloon');
 			});
 
+			/*
+            timerBalloonPos = setInterval(function () {
+                $this.trigger('setPosBalloon');
+            }, 500);
+            */
+
+			function changeDom() {
+				timerBalloonPos = setTimeout(function () {
+					$('.errBalloon').remove();
+					$('.invalid').trigger('validation');
+				}, 10);
+			}
+
+			// DOM変更のイベントで関数を呼び出す
+			if (typeof MutationObserver === 'function') {
+				var mo = new MutationObserver(changeDom);
+				mo.observe(
+					$this[0],
+					{
+						childList: true,
+						subtree: true
+					}
+				);
+			} else {
+				$this.on('DOMSubtreeModified', function () {
+					changeDom();
+				});
+			}
+
+
 			// カスタムバリデーション
 			$(this).off('validation').on('validation', inputDom, function (e) {
 				// e.preventDefault();
@@ -145,12 +176,29 @@
 									$(this).stop().fadeTo(settings.fadeSpeed, 1);
 								});
 						}
+						/*
+						setTimeout(function () {
+							$('input:not(.' + settings.errClass + ')').each(function () {
+								console.log($('#errBalloon' + $(this).index(inputDom)).attr('id'));
+							})
+							// $('input:not(.' + settings.errClass + ')').trigger('validation');
+						}, 10);
+						*//*
+						$('.errBalloon').each(function () {
+							var $this = $(this),
+								setValidation;
+
+							setValidation = setTimeout(function () {
+								console.log($this.attr('id').replace(/errBalloon/g, ''));
+							}, 10)
+						});*/
+
 
 					}
 
+
 					// balloonの位置を設定
 					$('#errBalloon' + inputNum)
-						.stop()
 						.offset(offset)
 						.addClass(settings.positionX)
 						.addClass(settings.positionY);
