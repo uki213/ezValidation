@@ -38,6 +38,7 @@
 
 				$('form').ezValidation({
 					// 'event':'focusout'
+					'baseDom': 'form'
 				});
 
 				$('.add-button').on('click', function () {
@@ -46,6 +47,7 @@
 
 				$('form').on('click', '.delete-button', function () {
 					$(this).parents('.add-input').remove();
+					$(window).trigger('resize');
 				})
 
 			});

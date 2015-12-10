@@ -36,7 +36,7 @@
 
 			// バリデーション→エラーポップアップ表示
 			function errorMsg(msg, e) {
-				var index = $(e.target).index(inputDom), i, errMsgHtml = '';
+				var index = $(e.target).attr('ezv-num'), i, errMsgHtml = '';
 				if (msg.length !== 0) {
 					for (i = 0; i < msg.length; i = i + 1) {
 						// HTMLタグを除去してエラーメッセージを作成
@@ -58,41 +58,34 @@
 				}
 			}
 
-			$(this).attr('novalidate', 'novalidate'); // HTML5標準のバリデーションをオフ
-
-			// 送信機能
-			$(this).on('submit', function (e) {
-				if (settings.submit(e) === false) {
-					return false;
-				}
-			});
-
-			// 各イベントを一つのイベントへ統一する
-			$(this).on(settings.event, inputDom, function (e) {
-				sendInputDelay = setTimeout(function () {
-					$(e.target).trigger('validation');
-				}, 10);
-				// e.stopPropagation();
-			});
+			$(this)
+				// HTML5標準のバリデーションをオフ
+				.attr('novalidate', 'novalidate')
+				// 送信機能
+				.on('submit', function (e) {
+					if (settings.submit(e) === false) {
+						return false;
+					}
+				})
+				// 各イベントを一つのイベントへ統一する
+				.on(settings.event, inputDom, function (e) {
+					sendInputDelay = setTimeout(function () {
+						$(e.target).trigger('validation');
+					}, 10);
+				})
+				// 入力項目に連番をつける
+				.data('ezv-number', '0');
 
 			$(window).on('resize', function () {
 				$this.trigger('setPosBalloon');
 			});
 
-			/*
-            timerBalloonPos = setInterval(function () {
-                $this.trigger('setPosBalloon');
-            }, 500);
-            */
-
 			function changeDom() {
-				timerBalloonPos = setTimeout(function () {
-					$('.errBalloon').remove();
-					$('.invalid').trigger('validation');
-				}, 10);
+				$this.trigger('setPosBalloon');
 			}
 
 			// DOM変更のイベントで関数を呼び出す
+			/*
 			if (typeof MutationObserver === 'function') {
 				var mo = new MutationObserver(changeDom);
 				mo.observe(
@@ -107,12 +100,10 @@
 					changeDom();
 				});
 			}
-
+			*/
 
 			// カスタムバリデーション
 			$(this).off('validation').on('validation', inputDom, function (e) {
-				// e.preventDefault();
-				// e.stopPropagation();
 				var i,
 					arrErrorMsg = [],
 					validationType;
@@ -132,7 +123,13 @@
 					var offset,
 						balloonWidth = $(e.target).outerWidth(),
 						balloonHeight = $(e.target).outerHeight(),
-						inputNum = $(e.target).index(inputDom);
+						inputNum;
+
+					if ($(e.target).attr('ezv-num') === undefined) {
+						$(e.target).attr('ezv-num', $this.data('ezv-number'));
+						$this.data('ezv-number', Number($this.data('ezv-number')) + 1);
+					}
+					inputNum = $(e.target).attr('ezv-num');
 
 					if ($(e.target).hasClass(settings.okClass) === false) {
 						// 土台座標作成
@@ -176,26 +173,15 @@
 									$(this).stop().fadeTo(settings.fadeSpeed, 1);
 								});
 						}
-						/*
-						setTimeout(function () {
-							$('input:not(.' + settings.errClass + ')').each(function () {
-								console.log($('#errBalloon' + $(this).index(inputDom)).attr('id'));
-							})
-							// $('input:not(.' + settings.errClass + ')').trigger('validation');
-						}, 10);
-						*//*
-						$('.errBalloon').each(function () {
-							var $this = $(this),
-								setValidation;
-
-							setValidation = setTimeout(function () {
-								console.log($this.attr('id').replace(/errBalloon/g, ''));
-							}, 10)
-						});*/
-
-
 					}
 
+					// 親要素がない吹き出しを削除
+					$('.errBalloon').each(function () {
+						var targetNumer = $(this).attr('id').replace(/errBalloon/g, '');
+						if ($('[ezv-num=' + targetNumer + ']')[0] === undefined) {
+							$(this).remove();
+						}
+					});
 
 					// balloonの位置を設定
 					$('#errBalloon' + inputNum)

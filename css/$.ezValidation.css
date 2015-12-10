@@ -13,7 +13,7 @@
 	bottom: 5px;
 	border-radius: 2px;
 	word-break: keep-all;
-	border: 1px solid #555;
+	border: 1px solid #777;
 }
 
 .errBalloon .balloon:before {
@@ -23,7 +23,7 @@
 	height: 0;
 	border-style: solid;
 	border-width: 10px 5px 0 5px;
-	border-color: #555 transparent transparent transparent;
+	border-color: #777 transparent transparent transparent;
 	position: absolute;
 	bottom: -10px;
 	left: 10px;
@@ -51,20 +51,21 @@
 	line-height: 12px;
 	font-family: arial, sans-serif;
 	position: absolute;
-	right: -5px;
-	top: -5px;
+	right: -2px;
+	top: -2px;
 	border-radius: 12px;
 	background: #fff;
 	text-align: center;
 	cursor: pointer;
 	border: 1px solid #777;
+	border-color: #777 #777 transparent transparent;
 }
 
 .errBalloon .balloon .close:after{
 	content: '';
 	display: block;
 	width: 8px;
-	height: 1px;
+	height: 2px;
 	background: #555;
 	position: absolute;
 	left: 2px;
@@ -76,7 +77,7 @@
 	content: '';
 	display: block;
 	width: 8px;
-	height: 1px;
+	height: 2px;
 	background: #555;
 	position: absolute;
 	left: 2px;
