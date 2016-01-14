@@ -10,7 +10,6 @@
 			customVali = 'custom-validation',
 			closeBtnDom = '<span class="close"></span>',
 			sendInputDelay,
-			timerBalloonPos,
 			$this = $(this),
 
 			// プラグインオプション
