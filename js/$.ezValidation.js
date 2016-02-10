@@ -201,9 +201,11 @@
 
 				for (i = 0; i < validationType.length; i = i + 1) {
 					if ($.validationRule[validationType[i]] !== undefined && $.validationRule[validationType[i]](e) !== false) {
-						$(e.target).addClass(settings.errClass);
-						// エラーメッセージ呼び出し
-						arrErrorMsg.push($.validationRule[validationType[i]](e));
+						if ($(e.target).prop('disabled') === false) {
+							$(e.target).addClass(settings.errClass);
+							// エラーメッセージ呼び出し
+							arrErrorMsg.push($.validationRule[validationType[i]](e));
+						}
 					}
 				}
 				errorMsg(arrErrorMsg, e);
