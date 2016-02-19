@@ -58,21 +58,21 @@
 			}
 
 			$(this)
-				// HTML5標準のバリデーションをオフ
+			// HTML5標準のバリデーションをオフ
 				.attr('novalidate', 'novalidate')
-				// 送信機能
+			// 送信機能
 				.on('submit', function (e) {
 					if (settings.submit(e) === false) {
 						return false;
 					}
 				})
-				// 各イベントを一つのイベントへ統一する
+			// 各イベントを一つのイベントへ統一する
 				.on(settings.event, inputDom, function (e) {
 					sendInputDelay = setTimeout(function () {
 						$(e.target).trigger('validation');
 					}, 10);
 				})
-				// 入力項目に連番をつける
+			// 入力項目に連番をつける
 				.data('ezv-number', '0');
 
 			$(window).on('resize', function () {
@@ -156,17 +156,17 @@
 								.stop().fadeTo(0, 0, function () {
 									$(this).find('.balloon').hide();
 								})
-								// balloonの閉じるボタンにイベントを設定
+							// balloonの閉じるボタンにイベントを設定
 								.on('click', '.close', function () {
 									$(this).parents('.errBalloon').trigger('close');
 								})
-								// balloonのクローズ機能（イベントドリブン）
+							// balloonのクローズ機能（イベントドリブン）
 								.on('close', function () {
 									$(this).stop().fadeTo(settings.fadeSpeed, 0, function () {
 										$(this).remove();//.children('.balloon').hide();
 									});
 								})
-								// balloonのオープン機能（イベントドリブン）
+							// balloonのオープン機能（イベントドリブン）
 								.on('open', function () {
 									$(this).find('.balloon').show();
 									$(this).stop().fadeTo(settings.fadeSpeed, 1);
@@ -262,4 +262,4 @@
 		});
 
 	};
-}(jQuery));
+} (jQuery));
