@@ -1,7 +1,7 @@
 /*global jQuery*/
 (function ($) {
-    'use strict';
-    $.validationRule = $.extend($.validationRule, {
+	'use strict';
+	$.validationRule = $.extend($.validationRule, {
 		/*
 		test02: function (e) {
 			if ($(e.target).val() === 'test') {
@@ -67,6 +67,6 @@
 				return false;
 			}
 		}
-    });
+	});
 
 }(jQuery));
