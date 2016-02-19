@@ -58,21 +58,21 @@
 			}
 
 			$(this)
-			// HTML5標準のバリデーションをオフ
+				// HTML5標準のバリデーションをオフ
 				.attr('novalidate', 'novalidate')
-			// 送信機能
+				// 送信機能
 				.on('submit', function (e) {
 					if (settings.submit(e) === false) {
 						return false;
 					}
 				})
-			// 各イベントを一つのイベントへ統一する
+				// 各イベントを一つのイベントへ統一する
 				.on(settings.event, inputDom, function (e) {
 					sendInputDelay = setTimeout(function () {
 						$(e.target).trigger('validation');
 					}, 10);
 				})
-			// 入力項目に連番をつける
+				// 入力項目に連番をつける
 				.data('ezv-number', '0');
 
 			$(window).on('resize', function () {
@@ -82,24 +82,6 @@
 			function changeDom() {
 				$this.trigger('setPosBalloon');
 			}
-
-			// DOM変更のイベントで関数を呼び出す
-			/*
-			if (typeof MutationObserver === 'function') {
-				var mo = new MutationObserver(changeDom);
-				mo.observe(
-					$this[0],
-					{
-						childList: true,
-						subtree: true
-					}
-				);
-			} else {
-				$this.on('DOMSubtreeModified', function () {
-					changeDom();
-				});
-			}
-			*/
 
 			// カスタムバリデーション
 			$(this).off('validation').on('validation', inputDom, function (e) {
