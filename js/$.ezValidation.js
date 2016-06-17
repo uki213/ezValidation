@@ -31,6 +31,19 @@
 				'defaultValidation': true
 			}, options);
 
+    // jQueryが3.0.0以上の時
+    function isJqv3 () {
+      var jQueryVer = $.fn.jquery;
+      jQueryVer = jQueryVer.replace(/\./g, '');
+      jQueryVer = Number(jQueryVer);
+
+      if (jQueryVer >= 300) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
 		return this.each(function () {
 
 			// バリデーション→エラーポップアップ表示
@@ -114,6 +127,7 @@
 
 					if ($(e.target).hasClass(settings.okClass) === false) {
 						// 土台座標作成
+            var scrollTop = $(window).scrollTop();
 						offset = $(e.target).offset();
 						// バルーンを右にする
 						if (settings.positionX === 'right') {
@@ -123,6 +137,11 @@
 						if (settings.positionY === 'bottom') {
 							offset.top = offset.top + balloonHeight;
 						}
+
+            // jQuery3以上の場合
+            if (isJqv3()) {
+              offset.top = offset.top - scrollTop;
+            }
 
 						// DOM生成
 						if (!$('#errBalloon' + inputNum)[0]) {
