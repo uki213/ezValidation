@@ -81,8 +81,8 @@
           sendInputDelay = setTimeout(function () {
             clearTimeout(sendInputDelay)
             $(e.target)
-              .trigger('validation')
               .removeClass(settings.okClass)
+              .trigger('validation')
           }, 10)
         })
         // 入力項目に連番をつける
