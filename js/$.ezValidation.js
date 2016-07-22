@@ -80,7 +80,9 @@
         .on(settings.event, inputDom, function (e) {
           sendInputDelay = setTimeout(function () {
             clearTimeout(sendInputDelay)
-            $(e.target).trigger('validation')
+            $(e.target)
+              .trigger('validation')
+              .removeClass(settings.okClass)
           }, 10)
         })
         // 入力項目に連番をつける
