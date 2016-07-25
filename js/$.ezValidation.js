@@ -218,7 +218,11 @@
           var pattern
 
           if ($(e.target).attr('required') === 'required' && $(e.target).val() === '') {
-            return '入力してください'
+            var retunMessage = '入力してください'
+            if (e.target.nodeName === 'SELECT') {
+              retunMessage = '選択してください'
+            }
+            return retunMessage
           }
           // pattern
           if ($(e.target).attr('pattern') !== undefined) {
