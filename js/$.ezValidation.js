@@ -51,10 +51,10 @@
             // HTMLタグを除去してエラーメッセージを作成
             errMsgHtml = errMsgHtml + '<div>' + msg[i].replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '') + '</div>'
           }
-          $('#errBalloon' + index).find('.errMsg').html(errMsgHtml)
-          $('#errBalloon' + index).trigger('open')
+          $this.find('#errBalloon' + index).find('.errMsg').html(errMsgHtml)
+          $this.find('#errBalloon' + index).trigger('open')
         } else {
-          $('#errBalloon' + index).trigger('close')
+          $this.find('#errBalloon' + index).trigger('close')
         }
       }
 
@@ -140,7 +140,7 @@
             }
 
             // DOM生成
-            if (!$('#errBalloon' + inputNum)[0]) {
+            if (!$this.find('#errBalloon' + inputNum)[0]) {
               // バルーンのクローズボタンの有無
               if (settings.closeButton === false) {
                 closeBtnDom = ''
@@ -148,7 +148,7 @@
 
               // balloonのDOMを生成
               $(settings.baseDom).append('<div id="errBalloon' + inputNum + '" class="errBalloon"><span class="balloon"><span class="errMsg"></span>' + closeBtnDom + '</span></div>')
-              $('#errBalloon' + inputNum)
+              $this.find('#errBalloon' + inputNum)
                 .stop().fadeTo(0, 0, function () {
                   $(this).find('.balloon').hide()
                 })
@@ -179,7 +179,7 @@
           })
 
           // balloonの位置を設定
-          $('#errBalloon' + inputNum)
+          $this.find('#errBalloon' + inputNum)
             .offset(offset)
             .addClass(settings.positionX)
             .addClass(settings.positionY)
