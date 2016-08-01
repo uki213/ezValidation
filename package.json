@@ -1,0 +1,27 @@
+{
+  "name": "ezv",
+  "version": "1.0.0",
+  "description": "日本語バリデーションツール $.ezValidation.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint **/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uki213/ezValidation.git"
+  },
+  "keywords": [
+    "javascript",
+    "validation"
+  ],
+  "author": "uki213",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/uki213/ezValidation/issues"
+  },
+  "homepage": "https://github.com/uki213/ezValidation#readme",
+  "devDependencies": {
+    "eslint": "^3.2.0",
+    "standard": "^7.1.2"
+  }
+}

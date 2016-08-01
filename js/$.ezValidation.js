@@ -195,7 +195,7 @@
         $(e.target).removeClass(settings.errClass).removeClass(settings.okClass)
 
         for (i = 0; i < validationType.length; i = i + 1) {
-          if ($.validationRule[validationType[i]] !== undefined && $.validationRule[validationType[i]](e) !== false) {
+          if ($.validationRule[validationType[i]] !== undefined && $.validationRule[validationType[i]](e) !== false && $.validationRule[validationType[i]](e) !== undefined) {
             if ($(e.target).prop('disabled') === false) {
               $(e.target).addClass(settings.errClass)
               // エラーメッセージ呼び出し
