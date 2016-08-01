@@ -1,4 +1,3 @@
-/*global jQuery*/
 (function ($) {
   'use strict'
   $.validationRule = $.extend($.validationRule, {

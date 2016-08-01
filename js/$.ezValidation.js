@@ -1,4 +1,3 @@
-/*global jQuery, window, setTimeout */
 (function ($) {
   'use strict'
   $.fn.ezValidation = function (options) {
