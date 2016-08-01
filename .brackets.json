@@ -2,4 +2,3 @@
   "linting.prefer": ["ESLint"],
   "linting.usePreferredOnly":true
 }
-
