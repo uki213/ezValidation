@@ -2,4 +2,7 @@
 {
     // Control whether or not jslint is enabled for JavaScript files.
     "jslint.enable": false,
+    // Control whether JSCS is enabled for JavaScript files or not.
+    "jscs.enable": false
+
 }
